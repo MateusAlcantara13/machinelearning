@@ -1,8 +1,7 @@
 # 🤖 Sistema Flexível de IA para Web  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()  
-[![Made with Python](https://img.shields.io/badge/Made%20with-Python-blue.svg)]()  
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()   
 [![Made with Node.js](https://img.shields.io/badge/Made%20with-Node.js-green.svg)]()  
 
 ---
@@ -34,12 +33,9 @@ Ele foi projetado para:
 
 ## 📂 Estrutura do Projeto  
 ```bash
-/sistema-ia-web
-│── backend/          # API de integração com IA
-│   ├── app.py        # Exemplo em Python (Flask ou FastAPI)
-│   ├── models/       # Modelos treinados (.pt, .onnx, .h5 etc.)
-│── frontend/         # Interface web
-│   ├── index.html
-│   ├── script.js
-│── docs/             # Documentação e exemplos
-│── README.md
+/machinelearning
+     
+ ├── index.html
+ ├── script.js
+ ├── style.css
+
