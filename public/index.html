@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leitor de Cédulas para Cegos</title>
-  <link rel="stylesheet" href="public/style.css">
+  <title>Leitor de Cédulas para deficientes visuais</title>
+  <link rel="stylesheet" href="style.css">
 
   <!-- TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
@@ -18,13 +18,20 @@
     <h1>Leitor de Cédulas</h1>
     <p class="subtitle">Sistema de Reconhecimento para Pessoas com Deficiência Visual</p>
 
-    <!-- STATUS (fica sozinho em cima) -->
+    <!-- STATUS -->
     <div id="status"></div>
 
     <!-- WEBCAM + RESULTADO LADO A LADO -->
     <div id="top-section">
       <div id="webcam-container"></div>
-      <div id="detected-note"></div>
+      
+      <!-- ESTRUTURA COMPLETA DO RESULTADO -->
+      <div id="detected-note">
+        <span class="money-icon"></span>
+        <h2>Nota Detectada</h2>
+        <div id="detected-note-name">R$ 0,00</div>
+        <div id="detected-confidence">Confiança: 0%</div>
+      </div>
     </div>
 
     <div id="label-container"></div>
@@ -32,6 +39,6 @@
 
   <audio id="notePlayer"></audio>
 
-  <script src="public/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
