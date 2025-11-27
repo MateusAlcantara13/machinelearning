@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Leitor de Cédulas para deficientes visuais</title>
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="public/style.css" />
 
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
@@ -12,17 +12,17 @@
     <!-- Teachable Machine -->
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-    <!-- ⚙️ CONFIGURAÇÃO DO FIREBASE -->
+    <!-- ⚙️ CONFIGURAÇÃO DO FIREBASE FIRESTORE -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import {
-        getDatabase,
-        ref,
-        push,
+        getFirestore,
+        collection,
+        addDoc,
         serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      // 🔥 SUBSTITUA PELAS CREDENCIAIS DO SEU PROJETO FIREBASE
+      // 🔥 SUAS CREDENCIAIS DO FIREBASE
       const firebaseConfig = {
         apiKey: "AIzaSyBBrenje9vP-u1SyYKlkZZXsWodrdvuWzk",
         authDomain: "visioncash-a2aa5.firebaseapp.com",
@@ -36,15 +36,15 @@
 
       // Inicializar Firebase
       const app = initializeApp(firebaseConfig);
-      const database = getDatabase(app);
+      const db = getFirestore(app);
 
       // Tornar disponível globalmente para o script.js
-      window.firebaseDb = database;
-      window.firebaseRef = ref;
-      window.firebasePush = push;
-      window.firebaseTimestamp = serverTimestamp;
+      window.firestoreDb = db;
+      window.firestoreCollection = collection;
+      window.firestoreAddDoc = addDoc;
+      window.firestoreTimestamp = serverTimestamp;
 
-      console.log("✅ Firebase inicializado com sucesso!");
+      console.log("✅ Firestore inicializado com sucesso!");
     </script>
   </head>
 
@@ -79,6 +79,6 @@
 
     <audio id="notePlayer"></audio>
 
-    <script src="/script.js"></script>
+    <script src="public/script.js"></script>
   </body>
 </html>

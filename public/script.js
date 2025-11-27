@@ -23,7 +23,7 @@ function setStatus(message, showSpinner = false) {
     : `<p>${message}</p>`;
 }
 
-// 📤 ENVIAR DADOS AUTOMATICAMENTE PARA O FIREBASE
+// 📤 ENVIAR DADOS AUTOMATICAMENTE PARA O FIRESTORE
 async function sendToFirebase(noteName, confidence) {
   try {
     // Mostrar indicador de envio
@@ -32,14 +32,14 @@ async function sendToFirebase(noteName, confidence) {
       firebaseIndicator.className = 'firebase-indicator sending';
     }
 
-    if (!window.firebaseDb) {
-      throw new Error('Firebase não inicializado');
+    if (!window.firestoreDb) {
+      throw new Error('Firestore não inicializado');
     }
 
     const detectionData = {
       noteName: noteName,
       confidence: parseFloat((confidence * 100).toFixed(1)),
-      timestamp: window.firebaseTimestamp(),
+      timestamp: window.firestoreTimestamp(),
       dateString: new Date().toLocaleString('pt-BR'),
       deviceInfo: {
         userAgent: navigator.userAgent,
@@ -47,12 +47,12 @@ async function sendToFirebase(noteName, confidence) {
       }
     };
 
-    // Enviar para o nó 'detections' no Firebase Realtime Database
-    const detectionsRef = window.firebaseRef(window.firebaseDb, 'detections');
-    const result = await window.firebasePush(detectionsRef, detectionData);
+    // Enviar para a coleção 'detections' no Firestore
+    const detectionsRef = window.firestoreCollection(window.firestoreDb, 'detections');
+    const result = await window.firestoreAddDoc(detectionsRef, detectionData);
 
-    console.log('✅ Dados enviados ao Firebase:', detectionData);
-    console.log('📍 ID do registro:', result.key);
+    console.log('✅ Dados enviados ao Firestore:', detectionData);
+    console.log('📍 ID do documento:', result.id);
 
     // Indicador de sucesso
     if (firebaseIndicator) {
@@ -66,7 +66,7 @@ async function sendToFirebase(noteName, confidence) {
     }
 
   } catch (error) {
-    console.error('❌ Erro ao enviar ao Firebase:', error);
+    console.error('❌ Erro ao enviar ao Firestore:', error);
     
     // Indicador de erro
     if (firebaseIndicator) {
@@ -185,12 +185,13 @@ function playAudio(noteName) {
   let audioFile = null;
   
   // 🔊 MAPEAMENTO DAS CLASSES PARA ARQUIVOS DE ÁUDIO
+  // Caminho absoluto a partir da raiz do site
   const notasComAudio = {
-    "2 reais": "sounds/0001.mp3",
-    "5 reais": "sounds/0005.mp3",
-    "10 reais": "sounds/0004.mp3",
-    "Não identificado !": "sounds/0003.mp3",
-    "Não foi possível ler o valor !": "sounds/0002.mp3"
+    "2 reais": "/public/sounds/0001.mp3",
+    "5 reais": "/public/sounds/0005.mp3",
+    "10 reais": "/public/sounds/0004.mp3",
+    "Não identificado !": "/public/sounds/0003.mp3",
+    "Não foi possível ler o valor !": "/public/sounds/0002.mp3"
   };
   
   audioFile = notasComAudio[noteName];
