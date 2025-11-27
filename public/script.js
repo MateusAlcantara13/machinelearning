@@ -1,4 +1,4 @@
-// ✅ URL DO MODELO TEACHABLE MACHINE
+// URL DO MODELO TEACHABLE MACHINE
 // Se precisar trocar, cole a URL do seu modelo exportado aqui
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/5J_EDQ_VB/";
 
@@ -13,7 +13,7 @@ const detectedNoteName = document.getElementById("detected-note-name");
 const detectedConfidence = document.getElementById("detected-confidence");
 const firebaseIndicator = document.getElementById("firebase-indicator");
 
-// ⚡ CONTROLE DE FPS - Predição a cada 300ms (3-4 FPS)
+// CONTROLE DE FPS - Predicao a cada 300ms (3-4 FPS)
 const PREDICTION_INTERVAL = 300;
 let lastPredictionTime = 0;
 
@@ -21,6 +21,40 @@ function setStatus(message, showSpinner = false) {
   statusDiv.innerHTML = showSpinner 
     ? `<div class="loading-spinner"></div><p>${message}</p>` 
     : `<p>${message}</p>`;
+}
+
+// 📍 OBTER LOCALIZACAO DO USUARIO
+async function getLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      console.warn('⚠️ Geolocalização não suportada pelo navegador');
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const locationData = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          timestamp: new Date(position.timestamp).toLocaleString('pt-BR'),
+          googleMapsUrl: `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`
+        };
+        console.log('📍 Localização obtida:', locationData);
+        resolve(locationData);
+      },
+      (error) => {
+        console.warn('⚠️ Erro ao obter localização:', error.message);
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
+  });
 }
 
 // 📤 ENVIAR DADOS AUTOMATICAMENTE PARA O FIRESTORE
@@ -36,11 +70,15 @@ async function sendToFirebase(noteName, confidence) {
       throw new Error('Firestore não inicializado');
     }
 
+    // Obter localização em tempo real
+    const location = await getLocation();
+
     const detectionData = {
       noteName: noteName,
       confidence: parseFloat((confidence * 100).toFixed(1)),
       timestamp: window.firestoreTimestamp(),
       dateString: new Date().toLocaleString('pt-BR'),
+      location: location, // Adiciona localização
       deviceInfo: {
         userAgent: navigator.userAgent,
         language: navigator.language
