@@ -1,44 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leitor de Cédulas para deficientes visuais</title>
-  <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leitor de Cédulas para deficientes visuais</title>
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- TensorFlow.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 
-  <!-- Teachable Machine -->
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
-</head>
+    <!-- Teachable Machine -->
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-<body>
-  <div id="container">
-    <h1>Leitor de Cédulas</h1>
-    <p class="subtitle">Sistema de Reconhecimento para Pessoas com Deficiência Visual</p>
+    <!-- ⚙️ CONFIGURAÇÃO DO FIREBASE -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    <!-- STATUS -->
-    <div id="status"></div>
+      // 🔥 SUBSTITUA PELAS CREDENCIAIS DO SEU PROJETO FIREBASE
+      const firebaseConfig = {
+        apiKey: "AIzaSyBBrenje9vP-u1SyYKlkZZXsWodrdvuWzk",
+        authDomain: "visioncash-a2aa5.firebaseapp.com",
+        databaseURL: "https://visioncash-a2aa5-default-rtdb.firebaseio.com",
+        projectId: "visioncash-a2aa5",
+        storageBucket: "visioncash-a2aa5.firebasestorage.app",
+        messagingSenderId: "289695307111",
+        appId: "1:289695307111:web:76f9e0cea6f8a1ac224bc2",
+        measurementId: "G-PCTNRM24LZ",
+      };
 
-    <!-- WEBCAM + RESULTADO LADO A LADO -->
-    <div id="top-section">
-      <div id="webcam-container"></div>
-      
-      <!-- ESTRUTURA COMPLETA DO RESULTADO -->
-      <div id="detected-note">
-        <span class="money-icon"></span>
-        <h2>Nota Detectada</h2>
-        <div id="detected-note-name">R$ 0,00</div>
-        <div id="detected-confidence">Confiança: 0%</div>
+      // Inicializar Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      // Tornar disponível globalmente para o script.js
+      window.firebaseDb = database;
+      window.firebaseRef = ref;
+      window.firebasePush = push;
+      window.firebaseTimestamp = serverTimestamp;
+
+      console.log("✅ Firebase inicializado com sucesso!");
+    </script>
+  </head>
+
+  <body>
+    <div id="container">
+      <h1>Leitor de Cédulas</h1>
+      <p class="subtitle">
+        Sistema de Reconhecimento para Pessoas com Deficiência Visual
+      </p>
+
+      <!-- Indicador de status do Firebase -->
+      <div class="firebase-indicator" id="firebase-indicator">Enviando...</div>
+
+      <!-- STATUS -->
+      <div id="status"></div>
+
+      <!-- WEBCAM + RESULTADO LADO A LADO -->
+      <div id="top-section">
+        <div id="webcam-container"></div>
+
+        <!-- ESTRUTURA COMPLETA DO RESULTADO -->
+        <div id="detected-note">
+          <span class="money-icon"></span>
+          <h2>Nota Detectada</h2>
+          <div id="detected-note-name">R$ 0,00</div>
+          <div id="detected-confidence">Confiança: 0%</div>
+        </div>
       </div>
+
+      <div id="label-container"></div>
     </div>
 
-    <div id="label-container"></div>
-  </div>
+    <audio id="notePlayer"></audio>
 
-  <audio id="notePlayer"></audio>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
