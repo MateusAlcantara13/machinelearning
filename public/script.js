@@ -1,6 +1,6 @@
 // URL DO MODELO TEACHABLE MACHINE
 // Se precisar trocar, cole a URL do seu modelo exportado aqui
-const MODEL_URL = "https://teachablemachine.withgoogle.com/models/5J_EDQ_VB/";
+const MODEL_URL = "https://teachablemachine.withgoogle.com/models/9_nEFbs8y/";
 
 let model, webcam, maxPredictions;
 let lastDetectedNote = null;
